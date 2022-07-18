@@ -3,6 +3,7 @@
  */
 package graph;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -53,8 +54,39 @@ public class CapGraph implements Graph {
 	 */
 	@Override
 	public Graph getEgonet(int center) {
-		// TODO Auto-generated method stub
-		return null;
+		// check whether center node exist in nodes 
+		if (!this.exportGraph().containsKey(center)) {
+			return null;
+		} else {
+			// init new Graph
+			Graph egonet = new CapGraph();
+			egonet.addVertex(center);
+			// find all neighbors of center node as HashSet primary neighbors
+			HashSet<Integer> primaryNeighbors = this.nodes.get(center);
+			//add all neighbor vertices to graph
+			for (int neighbor : primaryNeighbors) {
+				egonet.addVertex(neighbor);
+			}
+			//System.out.println("Primary neighbors");
+			//System.out.println(primaryNeighbors);
+			//for every neighbor in primary neighbors add vertex to newly created graph 
+			for (int neighbor : primaryNeighbors) {
+				//System.out.println("Neighbor: " + neighbor);
+				egonet.addEdge(center, neighbor);
+				HashSet<Integer> currNeighbors = this.nodes.get(neighbor);
+				//System.out.println("Curr neighbors: " + currNeighbors);
+				// for every neighbors node if their neighbors are in neighbors list add edge to new graph
+				for (int currNeighbor : currNeighbors) {
+					//System.out.println("Curr neighbor: " + currNeighbor);
+					if (primaryNeighbors.contains(currNeighbor) || currNeighbor == center) {
+						egonet.addEdge(neighbor, currNeighbor);
+					}
+					//System.out.println("curr egonet graph: " + egonet.exportGraph());
+				}
+			}
+			//System.out.println(egonet.exportGraph());
+			return egonet;
+		}
 	}
 
 	/* (non-Javadoc)

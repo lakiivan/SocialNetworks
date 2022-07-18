@@ -101,7 +101,7 @@ public class TestCapGraph {
 	 * Test adding vertices and edges by comparing two HashMaps after adding all vertices and edges
 	 */
 	@Test
-	public void TestAddVertexAndAddEdgeExportMap() {
+	public void testAddVertexAndAddEdgeExportMap() {
 		CapGraph cg = new CapGraph();
 		for (int i = 0; i < 5; i++) {
 			cg.addVertex(i);
@@ -141,4 +141,118 @@ public class TestCapGraph {
 		assertEquals(expected, actual);	
 		
 	}
+	
+	
+	/**
+	 * Test getEgonet by comparing two graphs
+	 */
+	@Test
+	public void testGetEgonet() {
+		System.out.println("testGetEgonet");
+		CapGraph cg = new CapGraph();
+		for (int i = 0; i < 5; i++) {
+			cg.addVertex(i);
+		}
+		cg.addEdge(0, 1);
+		cg.addEdge(0, 2);
+		cg.addEdge(1, 0);
+		cg.addEdge(1, 2);
+		cg.addEdge(2, 0);
+		cg.addEdge(2, 1);
+		cg.addEdge(2, 4);
+		cg.addEdge(4, 3);
+		cg.addEdge(3, 1);
+		
+		HashMap<Integer, HashSet<Integer>> actual = cg.getEgonet(0).exportGraph();
+		System.out.println("actual = ");
+		System.out.println(actual);
+		
+		CapGraph cge = new CapGraph();
+		cge.addVertex(0);
+		cge.addVertex(1);
+		cge.addVertex(2);
+		cge.addEdge(0, 1);
+		cge.addEdge(0, 2);
+		cge.addEdge(1, 0);
+		cge.addEdge(1, 2);
+		cge.addEdge(2, 0);
+		cge.addEdge(2, 1);
+		
+		HashMap<Integer, HashSet<Integer>> expected = cge.exportGraph();
+		System.out.println("expected = ");
+		System.out.println(expected);
+		assertEquals(expected, actual);	
+		
+	}
+	
+	/**
+	 * Test getEgonet by comparing two graphs
+	 */
+	@Test
+	public void testGetEgonet2() {
+		
+		CapGraph cg = new CapGraph();
+		for (int i = 0; i < 5; i++) {
+			cg.addVertex(i);
+		}
+		cg.addEdge(0, 1);
+		cg.addEdge(0, 2);
+		cg.addEdge(1, 0);
+		cg.addEdge(1, 2);
+		cg.addEdge(2, 0);
+		cg.addEdge(2, 1);
+		cg.addEdge(2, 4);
+		cg.addEdge(4, 3);
+		cg.addEdge(3, 1);
+		cg.addEdge(3, 4);
+		
+
+		HashMap<Integer, HashSet<Integer>> actual = cg.getEgonet(3).exportGraph();
+		System.out.println("actual = ");
+		System.out.println(actual);
+		
+		CapGraph cge = new CapGraph();
+		cge.addVertex(1);
+		cge.addVertex(3);
+		cge.addVertex(4);
+		cge.addEdge(3, 1);
+		cge.addEdge(4, 3);
+		cge.addEdge(3, 4);
+		HashMap<Integer, HashSet<Integer>> expected = cge.exportGraph();
+		System.out.println("expected = ");
+		System.out.println(expected);
+
+		assertEquals(expected, actual);	
+	}
+	
+	/**
+	 * Test getEgonet if vertex is not present in the graph
+	 */
+	@Test
+	public void testGetEgonetMissingVertex() {
+		CapGraph cg = new CapGraph();
+		for (int i = 0; i < 5; i++) {
+			cg.addVertex(i);
+		}
+		cg.addEdge(0, 1);
+		cg.addEdge(0, 2);
+		cg.addEdge(1, 0);
+		cg.addEdge(1, 2);
+		cg.addEdge(2, 0);
+		cg.addEdge(2, 1);
+		cg.addEdge(2, 4);
+		cg.addEdge(4, 3);
+		cg.addEdge(3, 1);
+		cg.addEdge(3, 4);
+
+		CapGraph actual = (CapGraph) cg.getEgonet(-5);
+		boolean isNull = false;
+		if (actual == null) {
+			isNull = true;
+		}
+		assertEquals(isNull, true);	
+		
+		
+	}
+	
 }
