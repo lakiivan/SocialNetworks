@@ -72,7 +72,7 @@ public class CapGraph implements Graph {
 	@Override
 	public HashMap<Integer, HashSet<Integer>> exportGraph() {
 		// TODO Auto-generated method stub
-		return null;
+		return this.nodes;
 	}
 
 }
