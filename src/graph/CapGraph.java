@@ -19,10 +19,19 @@ public class CapGraph implements Graph {
 	/* (non-Javadoc)
 	 * @see graph.Graph#addVertex(int)
 	 */
+	
+	private HashMap<Integer, HashSet<Integer>> nodes;
+	
+	public CapGraph() {
+		this.nodes = new HashMap<>();
+	}
+	
 	@Override
 	public void addVertex(int num) {
 		// TODO Auto-generated method stub
-
+		if (!this.nodes.containsKey(num)) {
+			this.nodes.put(num, new HashSet<>());
+		}
 	}
 
 	/* (non-Javadoc)
@@ -31,7 +40,12 @@ public class CapGraph implements Graph {
 	@Override
 	public void addEdge(int from, int to) {
 		// TODO Auto-generated method stub
-
+		if (this.nodes.containsKey(from) && this.nodes.containsKey(to)) {
+			HashSet<Integer> fromSet = this.nodes.get(from);
+			if (!fromSet.contains(to)) {
+				fromSet.add(to);
+			}
+		}
 	}
 
 	/* (non-Javadoc)
