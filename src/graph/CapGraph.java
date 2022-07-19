@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * @author Your name here.
@@ -96,6 +97,33 @@ public class CapGraph implements Graph {
 	public List<Graph> getSCCs() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public void dfsVisit(Graph g, int node, Stack<Integer> visited, Stack<Integer> finished) {
+		// place last visited node on top of finished stack and returns it
+		// check whether node is in the graph g
+		if (g.exportGraph().containsKey(node)) {
+			// add node to visited stack
+			visited.add(node);
+			HashSet<Integer> neighbors = g.exportGraph().get(node);
+			for (int neighbor : neighbors) {
+				if (!visited.contains(neighbor)) {
+					dfsVisit(g, neighbor, visited, finished);
+				}
+			}
+		}
+		finished.push(node);
+	}
+	
+	public Stack<Integer> transposeStack(Stack<Integer> original) {
+		Stack<Integer> transposed = new Stack<Integer>();
+		Stack<Integer> cloned = (Stack<Integer>)original.clone();
+		//System.out.println("cloned: " + cloned);
+		while (cloned.size() > 0) {
+			int currValue = cloned.pop();
+			transposed.push(currValue);
+		}
+		return transposed;
 	}
 
 	/* (non-Javadoc)

@@ -2,10 +2,12 @@ package test;
 
 import static org.junit.Assert.*;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Stack;
 
 import org.junit.Test;
 
@@ -148,7 +150,7 @@ public class TestCapGraph {
 	 */
 	@Test
 	public void testGetEgonet() {
-		System.out.println("testGetEgonet");
+		//System.out.println("testGetEgonet");
 		CapGraph cg = new CapGraph();
 		for (int i = 0; i < 5; i++) {
 			cg.addVertex(i);
@@ -164,8 +166,8 @@ public class TestCapGraph {
 		cg.addEdge(3, 1);
 		
 		HashMap<Integer, HashSet<Integer>> actual = cg.getEgonet(0).exportGraph();
-		System.out.println("actual = ");
-		System.out.println(actual);
+		//System.out.println("actual = ");
+		//System.out.println(actual);
 		
 		CapGraph cge = new CapGraph();
 		cge.addVertex(0);
@@ -179,8 +181,8 @@ public class TestCapGraph {
 		cge.addEdge(2, 1);
 		
 		HashMap<Integer, HashSet<Integer>> expected = cge.exportGraph();
-		System.out.println("expected = ");
-		System.out.println(expected);
+		//System.out.println("expected = ");
+		//System.out.println(expected);
 		assertEquals(expected, actual);	
 		
 	}
@@ -208,8 +210,8 @@ public class TestCapGraph {
 		
 
 		HashMap<Integer, HashSet<Integer>> actual = cg.getEgonet(3).exportGraph();
-		System.out.println("actual = ");
-		System.out.println(actual);
+		//System.out.println("actual = ");
+		//System.out.println(actual);
 		
 		CapGraph cge = new CapGraph();
 		cge.addVertex(1);
@@ -219,8 +221,8 @@ public class TestCapGraph {
 		cge.addEdge(4, 3);
 		cge.addEdge(3, 4);
 		HashMap<Integer, HashSet<Integer>> expected = cge.exportGraph();
-		System.out.println("expected = ");
-		System.out.println(expected);
+		//System.out.println("expected = ");
+		//System.out.println(expected);
 
 		assertEquals(expected, actual);	
 	}
@@ -250,9 +252,47 @@ public class TestCapGraph {
 		if (actual == null) {
 			isNull = true;
 		}
+		
 		assertEquals(isNull, true);	
 		
+	}
+
+	/**
+	 * Testing Stack transpose method
+	 */
+	@Test
+	public void testTransposeStack() {
+		CapGraph cg = new CapGraph();
+		Stack<Integer> original = new Stack<Integer>();
+		original.push(1);
+		original.push(2);
+		original.push(3);
+		original.push(4);
+		original.push(5);
+		//System.out.println("original: " + original);
+		
+		Stack<Integer> expected = new Stack<Integer>();
+		for (int i = 5; i > 0; i--) {
+			expected.push(i);
+		}
+		//System.out.println("expected: " + expected);
+		
+		Stack<Integer> actual = cg.transposeStack(original);
+		//System.out.println("acutal: " + actual);
+		
+		assertEquals(expected, actual);
 		
 	}
 	
+	/**
+	 * Test method trasnposeStack on empty stack
+	 */
+	public void testTrasnposeStackEmpty() {
+		CapGraph cg = new CapGraph();
+		Stack<Integer> expected = new Stack<Integer>();
+		Stack<Integer> actual = cg.transposeStack(expected);
+		
+		assertEquals(expected, actual);
+		
+	}
 }
