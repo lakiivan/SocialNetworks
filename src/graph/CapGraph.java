@@ -4,10 +4,12 @@
 package graph;
 
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Stack;
+import java.util.TreeSet;
 
 /**
  * @author Your name here.
@@ -99,16 +101,36 @@ public class CapGraph implements Graph {
 		return null;
 	}
 	
-	public void dfsVisit(Graph g, int node, Stack<Integer> visited, Stack<Integer> finished) {
+	public Stack<Integer> getStackFromSet() {
+		Stack<Integer> nodes = new Stack<Integer>();
+		for (int node : this.exportGraph().keySet()) {
+			nodes.push(node);
+		}
+		return nodes;
+	}
+	
+	public Stack<Integer> dfs(Stack<Integer> nodes) {
+		Stack<Integer> visited = new Stack<Integer>();
+		Stack<Integer> finished = new Stack<Integer>();
+		while (!nodes.isEmpty()) {
+			int node = nodes.pop();
+			if (!visited.contains(node)) {
+				dfsVisit(node, visited, finished);
+			}
+		}
+		return finished;
+	}
+	
+	public void dfsVisit(int node, Stack<Integer> visited, Stack<Integer> finished) {
 		// place last visited node on top of finished stack and returns it
 		// check whether node is in the graph g
-		if (g.exportGraph().containsKey(node)) {
+		if (this.exportGraph().containsKey(node)) {
 			// add node to visited stack
 			visited.add(node);
-			HashSet<Integer> neighbors = g.exportGraph().get(node);
+			HashSet<Integer> neighbors = this.exportGraph().get(node);
 			for (int neighbor : neighbors) {
 				if (!visited.contains(neighbor)) {
-					dfsVisit(g, neighbor, visited, finished);
+					dfsVisit(neighbor, visited, finished);
 				}
 			}
 		}

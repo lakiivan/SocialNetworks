@@ -3,12 +3,16 @@ package test;
 import static org.junit.Assert.*;
 
 import java.util.Arrays;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.Stack;
+import java.util.TreeSet;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import graph.CapGraph;
@@ -19,6 +23,36 @@ import graph.CapGraph;
  */
 
 public class TestCapGraph {
+	
+	CapGraph cGraph = null;
+	
+	@Before
+	public void setup() {
+		//System.out.println("Before setup");
+		cGraph = new CapGraph();
+		
+		cGraph.addVertex(18);
+		cGraph.addVertex(23);
+		cGraph.addVertex(25);
+		cGraph.addVertex(65);	
+		cGraph.addVertex(44);	
+		cGraph.addVertex(32);
+		cGraph.addVertex(50);
+		
+		cGraph.addEdge(18, 23);
+		cGraph.addEdge(18, 44);
+		cGraph.addEdge(23, 18);
+		cGraph.addEdge(23, 25);
+		cGraph.addEdge(25, 23);
+		cGraph.addEdge(25, 65);
+		cGraph.addEdge(65, 23);
+		cGraph.addEdge(44, 50);
+		cGraph.addEdge(32, 44);
+		cGraph.addEdge(32, 50);
+		cGraph.addEdge(44, 50);
+		
+		//System.out.println(cGraph.exportGraph());
+	}
 
 	/**
 	 * 
@@ -258,6 +292,14 @@ public class TestCapGraph {
 	}
 
 	/**
+	 * Test getStackFromSet
+	 */
+	@Test
+	public void testGetStackFromSet() {
+		
+	}
+	
+	/**
 	 * Testing Stack transpose method
 	 */
 	@Test
@@ -278,7 +320,7 @@ public class TestCapGraph {
 		//System.out.println("expected: " + expected);
 		
 		Stack<Integer> actual = cg.transposeStack(original);
-		//System.out.println("acutal: " + actual);
+		//System.out.println("actual: " + actual);
 		
 		assertEquals(expected, actual);
 		
@@ -290,9 +332,61 @@ public class TestCapGraph {
 	public void testTrasnposeStackEmpty() {
 		CapGraph cg = new CapGraph();
 		Stack<Integer> expected = new Stack<Integer>();
-		Stack<Integer> actual = cg.transposeStack(expected);
-		
+		Stack<Integer> original = new Stack<Integer>();
+		Stack<Integer> actual = cg.transposeStack(original);
 		assertEquals(expected, actual);
 		
 	}
+	
+	/**
+	 * Test dfs-visit by comparing to stacks
+	 */
+	@Test
+	public void testDsfVisited() {
+		
+		Stack<Integer> expected = new Stack<Integer>();
+		expected.push(65);
+		expected.push(25);
+		expected.push(23);
+		expected.push(50);
+		expected.push(44);
+		expected.push(18);
+		Stack<Integer> finished = new Stack<Integer>();
+		Stack<Integer> visited = new Stack<Integer>();
+		
+		cGraph.dfsVisit(18, visited, finished);
+		System.out.println("visited: " + visited);
+		System.out.println("finished: " + finished);
+		System.out.println("expected: " + expected);
+
+		assertEquals(expected, finished);
+		
+	}
+	
+	/**
+	 * Test dfs method by comparing two stacks
+	 */
+	@Test
+	public void testDfs() {
+
+		
+		System.out.println(cGraph.exportGraph());
+		
+		Stack<Integer> nodes = cGraph.getStackFromSet();
+		Stack<Integer> expected = new Stack<Integer>();
+		expected.push(65);
+		expected.push(25);
+		expected.push(23);
+		expected.push(50);
+		expected.push(44);
+		expected.push(18);
+		
+		
+		Stack<Integer> actual = cGraph.dfs(nodes);
+		String message = "Expected: " + expected + ", but was actual: " + actual;
+		System.out.println(message);
+		assertEquals(expected, actual);
+		
+	}
+	
 }
