@@ -16,6 +16,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import graph.CapGraph;
+import graph.Graph;
 
 /**
  * @author Ivan Local
@@ -387,6 +388,25 @@ public class TestCapGraph {
 		System.out.println(message);
 		assertEquals(expected, actual);
 		
+	}
+	
+	/**
+	 * Test for getSCCList
+	 */
+	@Test
+	public void testGetSCCList() {
+		
+		Stack<Integer> nodes = cGraph.getStackFromSet();
+		List<Graph> sccs = cGraph.getSCCs();
+	}
+	
+	/**
+	 * Test getSCC
+	 */
+	@Test
+	public void testGetSCC() {
+		List<Graph> sccGraphs = cGraph.getSCCs();
+		System.out.println("Test Finished");
 	}
 	
 }

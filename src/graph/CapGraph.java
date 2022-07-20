@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 import java.util.TreeSet;
@@ -97,7 +98,41 @@ public class CapGraph implements Graph {
 	 */
 	@Override
 	public List<Graph> getSCCs() {
+		//System.out.println("Get scc launched");
+		List<Graph> sccs = new LinkedList<Graph>();
 		// TODO Auto-generated method stub
+		Stack<Integer> nodes = getStackFromSet();
+		Stack<Integer> first = dfs(nodes);
+		Stack<Integer> transposed = transposeStack(first);
+		List<Stack<Integer>> sccStacks = dfsList(transposed);
+		
+		if (sccStacks.size() > 0) {
+			for (Stack<Integer> currNodes : sccStacks) {
+				System.out.println("currStackNode: " + currNodes);
+				sccs.add(makeGraph(currNodes));
+			}
+//			System.out.println("SCC Graphs:");
+//			for (Graph g : sccs) {
+//				System.out.println(g.exportGraph());
+//			}
+			return sccs;
+		} 
+		
+		return null;
+	}
+	
+	
+	public List<Graph> getSCCsOld() {
+		System.out.println("Get scc launched");
+		// TODO Auto-generated method stub
+		Stack<Integer> nodes = getStackFromSet();
+		Stack<Integer> first = dfs(nodes);
+		Stack<Integer> transposed = transposeStack(first);
+		List<Stack<Integer>> sccs = dfsList(transposed);
+		//System.out.println("SCCS:");
+		//for (Stack<Integer> scc : sccs) {
+			//System.out.println(scc);
+		//} 
 		return null;
 	}
 	
@@ -107,6 +142,44 @@ public class CapGraph implements Graph {
 			nodes.push(node);
 		}
 		return nodes;
+	}
+	
+	public List<Stack<Integer>> dfsList(Stack<Integer> nodes) {
+		List<Stack<Integer>> sccList = new LinkedList<Stack<Integer>>();
+		Stack<Integer> visited = new Stack<Integer>();
+		Stack<Integer> currStack = new Stack<Integer>();
+		while(!nodes.isEmpty()) {
+			int node = nodes.pop();
+			if(!visited.contains(node)) {
+				dfsVisit(node, visited, currStack);
+				sccList.add(copyStack(currStack));
+				//System.out.println("CurrStack: " + currStack);
+				currStack.clear();
+			}
+		}
+		return sccList;
+	}
+	
+	private Stack<Integer> copyStack(Stack<Integer> original) {
+		return (Stack<Integer>) original.clone();
+	}
+	
+	private Graph makeGraph(Stack<Integer> nodes) {
+		Graph scc = new CapGraph();
+		if (nodes.size() > 0) {
+			for (int node : nodes) {
+				scc.addVertex(node);
+			}
+			for (int node : nodes) {
+				HashSet<Integer> currEdges = this.exportGraph().get(node);
+				if (currEdges.size() > 0) {
+					for (int to : currEdges) {
+						scc.addEdge(node, to);
+					}
+				}
+			}
+		}
+		return scc;
 	}
 	
 	public Stack<Integer> dfs(Stack<Integer> nodes) {
